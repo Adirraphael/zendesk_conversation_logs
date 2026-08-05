@@ -1,0 +1,22 @@
+# Secrets
+.env
+*.env
+!.env.example
+
+# Generated data / exports
+*.csv
+*.xlsx
+*.json
+!requirements.txt
+
+# Python
+__pycache__/
+*.pyc
+.venv/
+venv/
+env/
+
+# OS/editor cruft
+.DS_Store
+.vscode/
+*.log
