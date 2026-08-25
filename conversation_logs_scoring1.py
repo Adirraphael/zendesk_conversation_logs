@@ -10,7 +10,7 @@ load_dotenv()  # reads variables from a local .env file (not committed to git)
 
 # ── CONFIG ────────────────────────────────────────────────────────────────────
 CSV_INPUT_FILE  = "zendesk_conversations_logs.csv"     # <-- your existing per-message export
-OUTPUT_CSV      = "zendesk_conversations_scored1.csv"
+OUTPUT_CSV      = "zendesk_conversations_scored.csv"
 OPENAI_API_KEY  = os.environ["OPENAI_API_KEY"]
 
 SUGGESTED_CATEGORIES = [
@@ -170,6 +170,18 @@ def is_skip_message(text):
     return any(phrase in lower for phrase in SKIP_PHRASES)
 
 
+def is_emoji_only(text):
+    """Return True if the text has no real alphabetic content — just emojis/symbols."""
+    import unicodedata
+    clean = text.strip()
+    if not clean:
+        return True
+    return not any(
+        unicodedata.category(c).startswith('L')
+        for c in clean
+    )
+
+
 # ── LOAD & PAIR Q&A FROM EXISTING PER-MESSAGE CSV ─────────────────────────────
 
 def load_and_pair(path):
@@ -220,6 +232,8 @@ def load_and_pair(path):
             if not message:
                 continue
             if is_skip_message(message):
+                continue
+            if is_emoji_only(message):
                 continue
 
             if role == "customer":
@@ -334,7 +348,3 @@ def main():
 if __name__ == "__main__":
     main()
 
-    # changes to make- make sure it removes emojis too so not capturing it in the user input.
-    # check if you can automate the process. so having both script combined and send the end result to bigquery
-    # you fisrt run the app_csv_full_conversatiom.py
-    # to get all the conversation logs and then you run converdsation_logs_scoring to get them graded

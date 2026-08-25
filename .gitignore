@@ -20,3 +20,5 @@ env/
 .DS_Store
 .vscode/
 *.log
+*.csv
+!zendesk_conversations_scored_master.csv
