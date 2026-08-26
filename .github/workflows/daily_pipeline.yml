@@ -2,11 +2,15 @@ name: Daily Zendesk Conversation Scoring
 
 on:
   schedule:
+    # GitHub Actions cron runs in UTC only.
+    # 13:00 UTC ≈ 8:00 AM Central Daylight Time (summer).
+    # During Central Standard Time (winter), this will run ≈ 7:00 AM local instead —
+    # adjust the hour below seasonally if exact 8:00 AM local time matters.
     - cron: '0 13 * * *'
-  workflow_dispatch:
+  workflow_dispatch:  # allows manually triggering a run from the Actions tab
 
 permissions:
-  contents: write
+  contents: write  # needed so the workflow can commit the updated CSV back to the repo
 
 jobs:
   run-pipeline:
@@ -37,4 +41,5 @@ jobs:
           git config user.email "github-actions[bot]@users.noreply.github.com"
           git add zendesk_conversations_scored_master.csv
           git diff --cached --quiet || git commit -m "Daily conversation scoring update $(date +'%Y-%m-%d')"
+          git pull --rebase origin main
           git push
