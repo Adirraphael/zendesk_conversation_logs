@@ -33,13 +33,15 @@ jobs:
           ZENDESK_EMAIL: ${{ secrets.ZENDESK_EMAIL }}
           ZENDESK_API_TOKEN: ${{ secrets.ZENDESK_API_TOKEN }}
           OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+          GCP_SERVICE_ACCOUNT_JSON: ${{ secrets.GCP_SERVICE_ACCOUNT_JSON }}
+          BQ_TABLE_REF: ${{ secrets.BQ_TABLE_REF }}
         run: python daily_zendesk_pipeline.py
 
-      - name: Commit updated CSV back to repo
+      - name: Commit updated CSV and crawl cache back to repo
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
-          git add zendesk_conversations_scored_master.csv
+          git add zendesk_conversations_scored_master.csv website_content_cache.json
           git diff --cached --quiet || git commit -m "Daily conversation scoring update $(date +'%Y-%m-%d')"
           git pull --rebase origin main
           git push

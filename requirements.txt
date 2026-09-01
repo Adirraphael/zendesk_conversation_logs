@@ -1,5 +1,6 @@
 requests
 pandas
 python-dotenv
-streamlit
-plotly
+beautifulsoup4
+lxml
+google-cloud-bigquery
