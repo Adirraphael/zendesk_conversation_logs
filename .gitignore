@@ -5,9 +5,11 @@
 
 # Generated data / exports
 *.csv
+!zendesk_conversations_scored_master.csv
 *.xlsx
 *.json
-!requirements.txt
+!website_content_cache.json
+!instructions_export.csv
 
 # Python
 __pycache__/
@@ -20,5 +22,3 @@ env/
 .DS_Store
 .vscode/
 *.log
-*.csv
-!zendesk_conversations_scored_master.csv
